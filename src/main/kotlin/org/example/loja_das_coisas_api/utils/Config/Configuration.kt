@@ -9,26 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder
 @Configuration
 class Configuration {
 
-    /*@Bean
-    fun customerDetailsService(customerRepository: CustomerRepository): CustomerDetailsService =
-        CustomerDetailsService(customerRepository)*/
-
     @Bean
     fun encoder(): PasswordEncoder = BCryptPasswordEncoder()
-
-    /*@Bean
-    fun authenticationProvider(customerRepository: CustomerRepository): AuthenticationProvider =
-        DaoAuthenticationProvider()
-            .also {
-                it.setUserDetailsService(CustomerDetailsService(customerRepository))
-                it.setPasswordEncoder(encoder())
-            }*/
-
-    /*@Bean
-    fun authenticationManager(
-        config: AuthenticationConfiguration
-    ): AuthenticationManager =
-        config.authenticationManager*/
 
     @Bean
     fun mapper(): ModelMapper {

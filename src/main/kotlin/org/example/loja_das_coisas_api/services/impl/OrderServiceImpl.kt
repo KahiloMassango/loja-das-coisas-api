@@ -46,7 +46,6 @@ class OrderServiceImpl(
             productQty = request.orderItems.size,
             subTotal = subtotal,
             total = subtotal + request.deliveryFee,
-            deliveryMethod = request.deliveryMethod,
             deliveryFee = request.deliveryFee,
             deliveryAddressName = request.deliveryAddressName,
             deliveryLatitude = request.latitude,

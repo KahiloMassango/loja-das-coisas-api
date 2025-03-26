@@ -26,7 +26,6 @@ data class CustomerOrderDetailDtoRes(
     val total: Int,
     val deliveryAddressName: String,
     val paymentType: String,
-    val deliveryMethod: String,
     val status: String,
     val orderItems: List<OrderItemDtoRes>
 )

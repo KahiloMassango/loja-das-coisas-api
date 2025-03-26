@@ -28,7 +28,6 @@ fun Order.toStoreDetailDtoRes(
     total = total,
     deliveryAddressName = deliveryAddressName,
     paymentType = paymentType,
-    deliveryMethod = deliveryMethod,
     delivered = status == OrderStatus.Entregue,
     orderItems = orderItems
 )

@@ -20,7 +20,6 @@ data class Order(
     @Column(nullable = false)
     var status: OrderStatus = OrderStatus.Processando,
     val paymentType: String,
-    var deliveryMethod: String,
     var deliveryFee: Int,
     var deliveryAddressName: String,
     var deliveryLatitude: Double,

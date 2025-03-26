@@ -25,7 +25,6 @@ fun Order.toDetailDtoRes(
     total = total,
     deliveryAddressName = deliveryAddressName,
     paymentType = paymentType,
-    deliveryMethod = deliveryMethod,
     status = status.name,
     orderItems = orderItems
 )

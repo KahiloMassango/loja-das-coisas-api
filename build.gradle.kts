@@ -37,6 +37,8 @@ dependencies {
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
     implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.xerial:sqlite-jdbc:3.45.1.0")
+    implementation("org.hibernate.orm:hibernate-community-dialects:6.4.1.Final")
 
     //implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     //implementation("io.jsonwebtoken:jjwt-impl:0.12.6")

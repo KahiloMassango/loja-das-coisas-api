@@ -3,8 +3,8 @@ package org.example.loja_das_coisas_api.services.impl
 import jakarta.transaction.Transactional
 import org.example.loja_das_coisas_api.dtos.responses.StoreFinanceStatus
 import org.example.loja_das_coisas_api.dtos.responses.StoreWithdrawDtoRes
-import org.example.loja_das_coisas_api.exceptions.EntityNotFoundException
-import org.example.loja_das_coisas_api.exceptions.InsufficientBalanceException
+import org.example.loja_das_coisas_api.exception.EntityNotFoundException
+import org.example.loja_das_coisas_api.exception.InsufficientBalanceException
 import org.example.loja_das_coisas_api.models.store.StoreWithdraw
 import org.example.loja_das_coisas_api.models.store.WithdrawStatus
 import org.example.loja_das_coisas_api.models.store.toDtoRes

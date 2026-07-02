@@ -5,8 +5,8 @@ import org.example.loja_das_coisas_api.dtos.requests.StoreDtoReq
 import org.example.loja_das_coisas_api.dtos.responses.StoreAdminDtoRes
 import org.example.loja_das_coisas_api.dtos.responses.StoreDetailDtoRes
 import org.example.loja_das_coisas_api.dtos.responses.StoreDtoRes
-import org.example.loja_das_coisas_api.exceptions.AlreadyExistsException
-import org.example.loja_das_coisas_api.exceptions.EntityNotFoundException
+import org.example.loja_das_coisas_api.exception.AlreadyExistsException
+import org.example.loja_das_coisas_api.exception.EntityNotFoundException
 import org.example.loja_das_coisas_api.models.User
 import org.example.loja_das_coisas_api.models.UserRole
 import org.example.loja_das_coisas_api.models.mappers.toDtoRes

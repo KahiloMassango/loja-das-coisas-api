@@ -1,4 +1,4 @@
-package org.example.loja_das_coisas_api.exceptions
+package org.example.loja_das_coisas_api.exception
 
 class EntityNotFoundException : Exception {
     constructor() : super("Não Encontrada!")

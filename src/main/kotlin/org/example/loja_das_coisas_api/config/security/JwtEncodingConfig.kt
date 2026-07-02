@@ -1,4 +1,4 @@
-package org.example.loja_das_coisas_api.utils.Config.Security
+package org.example.loja_das_coisas_api.config.security
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret
 import com.nimbusds.jose.proc.SecurityContext

@@ -2,7 +2,7 @@ package org.example.loja_das_coisas_api.services.impl
 
 import org.example.loja_das_coisas_api.dtos.requests.ColorDtoReq
 import org.example.loja_das_coisas_api.dtos.responses.ColorDtoRes
-import org.example.loja_das_coisas_api.exceptions.EntityNotFoundException
+import org.example.loja_das_coisas_api.exception.EntityNotFoundException
 import org.example.loja_das_coisas_api.models.Color
 import org.example.loja_das_coisas_api.models.mappers.toDtoRes
 import org.example.loja_das_coisas_api.repositories.ColorRepository

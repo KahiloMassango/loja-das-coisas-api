@@ -4,8 +4,8 @@ import jakarta.transaction.Transactional
 import org.example.loja_das_coisas_api.dtos.requests.CustomerDtoReq
 import org.example.loja_das_coisas_api.dtos.requests.CustomerUpdateDtoReq
 import org.example.loja_das_coisas_api.dtos.responses.CustomerDtoRes
-import org.example.loja_das_coisas_api.exceptions.AlreadyExistsException
-import org.example.loja_das_coisas_api.exceptions.EntityNotFoundException
+import org.example.loja_das_coisas_api.exception.AlreadyExistsException
+import org.example.loja_das_coisas_api.exception.EntityNotFoundException
 import org.example.loja_das_coisas_api.models.Customer
 import org.example.loja_das_coisas_api.models.User
 import org.example.loja_das_coisas_api.models.UserRole

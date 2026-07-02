@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional
 import org.example.loja_das_coisas_api.dtos.requests.CategoryDtoReq
 import org.example.loja_das_coisas_api.dtos.requests.CategoryUpdateDtoReq
 import org.example.loja_das_coisas_api.dtos.responses.CategoryDtoRes
-import org.example.loja_das_coisas_api.exceptions.EntityNotFoundException
+import org.example.loja_das_coisas_api.exception.EntityNotFoundException
 import org.example.loja_das_coisas_api.models.Category
 import org.example.loja_das_coisas_api.models.mappers.toDtoRes
 import org.example.loja_das_coisas_api.repositories.CategoryRepository

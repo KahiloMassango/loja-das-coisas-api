@@ -1,6 +1,6 @@
-package org.example.loja_das_coisas_api.utils.Config.Security
+package org.example.loja_das_coisas_api.config.security
 
-import org.example.loja_das_coisas_api.exceptions.InvalidRefreshTokenException
+import org.example.loja_das_coisas_api.exception.InvalidRefreshTokenException
 import org.example.loja_das_coisas_api.models.User
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.oauth2.jwt.*

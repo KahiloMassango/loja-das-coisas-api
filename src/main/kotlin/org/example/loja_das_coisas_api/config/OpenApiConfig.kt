@@ -1,5 +1,6 @@
-package org.example.loja_das_coisas_api.utils.Config
+package org.example.loja_das_coisas_api.config
 
+import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
 import io.swagger.v3.oas.models.info.Contact
 import io.swagger.v3.oas.models.info.Info
@@ -38,7 +39,7 @@ class OpenApiConfig : WebMvcConfigurer {
                 SecurityRequirement().addList("bearerAuth")
             )
             .components(
-                io.swagger.v3.oas.models.Components()
+                Components()
                     .addSecuritySchemes(
                         "bearerAuth",
                         SecurityScheme()

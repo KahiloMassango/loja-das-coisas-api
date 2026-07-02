@@ -4,9 +4,9 @@ import jakarta.transaction.Transactional
 import org.example.loja_das_coisas_api.dtos.requests.OrderDtoReq
 import org.example.loja_das_coisas_api.dtos.requests.OrderItemDtoReq
 import org.example.loja_das_coisas_api.dtos.responses.order.*
-import org.example.loja_das_coisas_api.exceptions.DifferentStoreProductsException
-import org.example.loja_das_coisas_api.exceptions.EntityNotFoundException
-import org.example.loja_das_coisas_api.exceptions.InsufficientStockException
+import org.example.loja_das_coisas_api.exception.DifferentStoreProductsException
+import org.example.loja_das_coisas_api.exception.EntityNotFoundException
+import org.example.loja_das_coisas_api.exception.InsufficientStockException
 import org.example.loja_das_coisas_api.models.OrderItem
 import org.example.loja_das_coisas_api.models.ProductItem
 import org.example.loja_das_coisas_api.models.mappers.toDtoRes

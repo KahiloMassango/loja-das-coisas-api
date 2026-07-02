@@ -1,4 +1,4 @@
-package org.example.loja_das_coisas_api.utils.Config
+package org.example.loja_das_coisas_api.config
 
 import org.modelmapper.ModelMapper
 import org.springframework.context.annotation.Bean

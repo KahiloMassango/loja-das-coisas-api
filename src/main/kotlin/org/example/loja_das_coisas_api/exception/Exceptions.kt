@@ -1,4 +1,4 @@
-package org.example.loja_das_coisas_api.exceptions
+package org.example.loja_das_coisas_api.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.ResponseStatus

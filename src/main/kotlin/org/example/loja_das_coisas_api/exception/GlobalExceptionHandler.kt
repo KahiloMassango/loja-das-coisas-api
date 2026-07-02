@@ -1,4 +1,4 @@
-package org.example.loja_das_coisas_api.exceptions
+package org.example.loja_das_coisas_api.exception
 
 import org.example.loja_das_coisas_api.common.APIResponse
 import org.example.loja_das_coisas_api.common.Response

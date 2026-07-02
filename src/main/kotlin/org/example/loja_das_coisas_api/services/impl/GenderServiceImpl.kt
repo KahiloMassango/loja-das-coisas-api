@@ -3,7 +3,7 @@ package org.example.loja_das_coisas_api.services.impl
 import jakarta.transaction.Transactional
 import org.example.loja_das_coisas_api.dtos.requests.GenderDtoReq
 import org.example.loja_das_coisas_api.dtos.responses.GenderDtoRes
-import org.example.loja_das_coisas_api.exceptions.EntityNotFoundException
+import org.example.loja_das_coisas_api.exception.EntityNotFoundException
 import org.example.loja_das_coisas_api.models.Gender
 import org.example.loja_das_coisas_api.models.mappers.toDtoRes
 import org.example.loja_das_coisas_api.repositories.CategoryRepository

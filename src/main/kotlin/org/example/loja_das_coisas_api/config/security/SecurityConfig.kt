@@ -1,4 +1,4 @@
-package org.example.loja_das_coisas_api.utils.Config.Security
+package org.example.loja_das_coisas_api.config.security
 
 import org.example.loja_das_coisas_api.models.UserRole
 import org.springframework.context.annotation.Bean

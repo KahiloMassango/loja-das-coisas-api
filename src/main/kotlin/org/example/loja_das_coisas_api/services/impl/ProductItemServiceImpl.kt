@@ -4,7 +4,7 @@ import org.example.loja_das_coisas_api.dtos.requests.ProductItemDtoReq
 import org.example.loja_das_coisas_api.dtos.requests.ProductItemUpdateDtoReq
 import org.example.loja_das_coisas_api.dtos.responses.ProductItemDtoRes
 import org.example.loja_das_coisas_api.dtos.responses.ProductItemStoreDtoRes
-import org.example.loja_das_coisas_api.exceptions.EntityNotFoundException
+import org.example.loja_das_coisas_api.exception.EntityNotFoundException
 import org.example.loja_das_coisas_api.models.ProductItem
 import org.example.loja_das_coisas_api.models.mappers.toDtoRes
 import org.example.loja_das_coisas_api.models.mappers.toStoreDtoRes

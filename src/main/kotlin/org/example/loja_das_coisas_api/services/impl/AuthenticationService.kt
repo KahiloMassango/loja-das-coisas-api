@@ -4,11 +4,11 @@ import org.example.loja_das_coisas_api.controllers.AuthenticationRequest
 import org.example.loja_das_coisas_api.controllers.AuthenticationResponse
 import org.example.loja_das_coisas_api.dtos.requests.CustomerDtoReq
 import org.example.loja_das_coisas_api.dtos.responses.CustomerDtoRes
-import org.example.loja_das_coisas_api.exceptions.InvalidCredentialsException
-import org.example.loja_das_coisas_api.exceptions.InvalidRefreshTokenException
+import org.example.loja_das_coisas_api.exception.InvalidCredentialsException
+import org.example.loja_das_coisas_api.exception.InvalidRefreshTokenException
 import org.example.loja_das_coisas_api.repositories.UserRepository
 import org.example.loja_das_coisas_api.services.interfaces.CustomerService
-import org.example.loja_das_coisas_api.utils.Config.Security.TokenService
+import org.example.loja_das_coisas_api.config.security.TokenService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 

@@ -7,8 +7,8 @@ import org.example.loja_das_coisas_api.dtos.responses.ProductDtoRes
 import org.example.loja_das_coisas_api.dtos.responses.ProductStoreDtoRes
 import org.example.loja_das_coisas_api.dtos.responses.ProductWithVariationDtoRes
 import org.example.loja_das_coisas_api.dtos.responses.ProductWithVariationStoreDtoRes
-import org.example.loja_das_coisas_api.exceptions.AlreadyExistsException
-import org.example.loja_das_coisas_api.exceptions.EntityNotFoundException
+import org.example.loja_das_coisas_api.exception.AlreadyExistsException
+import org.example.loja_das_coisas_api.exception.EntityNotFoundException
 import org.example.loja_das_coisas_api.models.Product
 import org.example.loja_das_coisas_api.models.mappers.toDtoRes
 import org.example.loja_das_coisas_api.models.mappers.toDtoResWithVariation

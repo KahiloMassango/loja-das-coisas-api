@@ -2,8 +2,8 @@ package org.example.loja_das_coisas_api.services.impl
 
 import org.example.loja_das_coisas_api.dtos.requests.SizeDtoReq
 import org.example.loja_das_coisas_api.dtos.responses.SizeDtoRes
-import org.example.loja_das_coisas_api.exceptions.AlreadyExistsException
-import org.example.loja_das_coisas_api.exceptions.EntityNotFoundException
+import org.example.loja_das_coisas_api.exception.AlreadyExistsException
+import org.example.loja_das_coisas_api.exception.EntityNotFoundException
 import org.example.loja_das_coisas_api.models.Size
 import org.example.loja_das_coisas_api.models.mappers.toDtoRes
 import org.example.loja_das_coisas_api.repositories.CategoryRepository

@@ -1,6 +1,6 @@
 package org.example.loja_das_coisas_api.config.security
 
-import org.example.loja_das_coisas_api.models.UserRole
+import org.example.loja_das_coisas_api.auth.model.UserRole
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod

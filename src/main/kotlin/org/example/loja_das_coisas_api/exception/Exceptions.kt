@@ -1,22 +1,25 @@
 package org.example.loja_das_coisas_api.exception
 
 import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.ResponseStatus
 import java.util.*
 
 class InsufficientStockException(productItemId: UUID, availableStock: Int) :
-    Exception("Algum producto excedeu a quantidade em estoque!")
+    BusinessException("Algum producto excedeu a quantidade em estoque!", HttpStatus.BAD_REQUEST)
 
-class DifferentStoreProductsException : Exception("Produtos de lojas diferentes não são permitidos")
+class DifferentStoreProductsException :
+    BusinessException("Produtos de lojas diferentes não são permitidos", HttpStatus.BAD_REQUEST)
 
-class NotAuthorizedException : Exception("")
+class NotAuthorizedException :
+    BusinessException("Não autorizado", HttpStatus.UNAUTHORIZED)
 
-class InvalidCredentialsException : Exception("Credenciais inválidas!")
+class InvalidCredentialsException :
+    BusinessException("Credenciais inválidas!", HttpStatus.UNAUTHORIZED)
 
-class InvalidRefreshTokenException : Exception("Token de actualização inválido")
+class InvalidRefreshTokenException :
+    BusinessException("Token de actualização inválido", HttpStatus.UNAUTHORIZED)
 
-class InsufficientBalanceException : Exception("Balanço insuficiente")
+class InsufficientBalanceException :
+    BusinessException("Balanço insuficiente", HttpStatus.BAD_REQUEST)
 
-@ResponseStatus(HttpStatus.UNAUTHORIZED)
-class TokenExpiredException(message: String) : Exception(message)
-
+class TokenExpiredException(message: String) :
+    BusinessException(message, HttpStatus.UNAUTHORIZED)

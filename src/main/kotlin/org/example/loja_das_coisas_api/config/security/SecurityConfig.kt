@@ -23,7 +23,7 @@ class SecurityConfig {
         // Define public and private routes
 
         http.authorizeHttpRequests {
-            it.requestMatchers("/v1/auth/logout").hasAnyRole(UserRole.CUSTOMER.name, UserRole.STORE.name)
+            it.requestMatchers("/v1/auth/logout").authenticated()
             it.requestMatchers("/v1/auth/login").permitAll()
             it.requestMatchers("/v1/auth/create-account").permitAll()
             it.requestMatchers("/v1/auth/refresh-token").permitAll()

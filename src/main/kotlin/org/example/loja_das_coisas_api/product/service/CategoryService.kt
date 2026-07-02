@@ -42,6 +42,10 @@ class CategoryService(
         return categoryRepository.findAllByDeletedFalse().map { it.toDtoRes() }
     }
 
+    fun getAllCategoryEntities(): List<Category> {
+        return categoryRepository.findAllByDeletedFalse()
+    }
+
     fun findById(id: UUID): CategoryDtoRes {
         val fetchedCategory = categoryRepository.findByIdAndDeletedFalse(id)
         if (fetchedCategory.isPresent) {

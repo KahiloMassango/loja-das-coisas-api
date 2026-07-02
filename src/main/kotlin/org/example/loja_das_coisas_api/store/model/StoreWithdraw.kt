@@ -6,7 +6,7 @@ import org.example.loja_das_coisas_api.store.dto.StoreWithdrawDtoRes
 
 @Entity
 @Table(name = "store_withdraws")
-data class StoreWithdraw(
+class StoreWithdraw(
     @ManyToOne(fetch = FetchType.LAZY)
     var store: StoreProfile,
     var amount: Int,

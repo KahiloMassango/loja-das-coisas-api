@@ -12,7 +12,7 @@ import java.time.LocalTime
 
 @Entity
 @Table(name = "store")
-data class StoreProfile(
+ class StoreProfile(
     @Column(unique = true)
     var storeName: String,
     @Column(nullable = false)

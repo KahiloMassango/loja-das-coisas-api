@@ -6,7 +6,7 @@ import org.example.loja_das_coisas_api.store.model.StoreProfile
 
 @Entity
 @Table
-data class Product(
+class Product(
     var name: String,
     var imageUrl: String,
     var description: String,
@@ -28,5 +28,5 @@ data class Product(
     var deleted: Boolean = false,
 
     @OneToMany(mappedBy = "product", cascade = [CascadeType.PERSIST], fetch = FetchType.LAZY)
-    val productItems: List<ProductItem> = emptyList()
+    var productItems: MutableList<ProductItem> = mutableListOf()
 ) : BaseEntity()

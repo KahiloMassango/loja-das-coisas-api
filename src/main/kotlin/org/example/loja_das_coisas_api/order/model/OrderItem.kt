@@ -7,7 +7,7 @@ import org.example.loja_das_coisas_api.shared.model.BaseEntity
 
 @Entity
 @Table(name = "order_items")
-data class OrderItem(
+class OrderItem(
     @NotNull
     var productName: String,
     @ManyToOne(fetch = FetchType.LAZY)

@@ -5,7 +5,7 @@ import org.example.loja_das_coisas_api.shared.model.BaseEntity
 
 @Entity
 @Table
-data class ProductItem(
+class ProductItem(
     @ManyToOne
     @JoinColumn(name = "product_id")
     var product: Product,

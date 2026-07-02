@@ -7,7 +7,7 @@ import java.time.Instant
 import java.util.*
 
 @MappedSuperclass
-class BaseEntity(
+open class BaseEntity(
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -17,6 +17,5 @@ class BaseEntity(
     var createdAt: Instant? = null,
 
     @UpdateTimestamp
-    //@Column(nullable = false, columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT NOW()")
     var updatedAt: Instant? = null
 )

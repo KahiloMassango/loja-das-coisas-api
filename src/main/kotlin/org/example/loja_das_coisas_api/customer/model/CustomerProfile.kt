@@ -6,7 +6,7 @@ import org.example.loja_das_coisas_api.shared.model.BaseEntity
 
 @Entity
 @Table(name = "customer")
-data class CustomerProfile(
+class CustomerProfile(
 
     var username: String,
 

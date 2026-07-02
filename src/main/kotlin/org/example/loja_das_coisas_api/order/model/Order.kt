@@ -7,7 +7,7 @@ import org.example.loja_das_coisas_api.store.model.StoreProfile
 
 @Entity
 @Table(name = "orders")
-data class Order(
+class Order(
     @ManyToOne(fetch = FetchType.LAZY)
     var customer: CustomerProfile,
     @ManyToOne(fetch = FetchType.LAZY)

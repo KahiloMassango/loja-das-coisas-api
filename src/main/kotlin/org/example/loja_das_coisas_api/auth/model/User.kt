@@ -5,7 +5,7 @@ import org.example.loja_das_coisas_api.shared.model.BaseEntity
 
 @Entity
 @Table(name = "users")
-data class User(
+class User(
     @Column(unique = true, nullable = false)
     var email: String,
     var password: String,

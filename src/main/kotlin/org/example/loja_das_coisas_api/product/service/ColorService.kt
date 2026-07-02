@@ -64,10 +64,9 @@ class ColorService(
     }
 
     fun delete(id: UUID) {
-        val color = colorRepository.findById(id)
-        if (!color.isPresent) {
-            throw EntityNotFoundException("Cor não encontrada")
-        }
-        colorRepository.save(color.get().copy(deleted = true))
+        val color = colorRepository.findById(id).orElseThrow { EntityNotFoundException("Cor não encontrada") }
+
+        color!!.deleted = true
+        colorRepository.save(color)
     }
 }

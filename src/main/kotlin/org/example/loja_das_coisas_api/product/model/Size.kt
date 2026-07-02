@@ -5,7 +5,7 @@ import org.example.loja_das_coisas_api.shared.model.BaseEntity
 
 @Entity
 @Table
-data class Size(
+class Size(
     var value: String,
 
     @ManyToOne

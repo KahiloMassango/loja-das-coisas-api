@@ -33,6 +33,8 @@ dependencies {
   //  implementation("org.springframework.security:spring-security-config:6.4.2")
     implementation("org.hibernate.common:hibernate-commons-annotations:6.0.6.Final")
 
+    implementation("com.google.firebase:firebase-admin:9.8.0")
+
     implementation("io.minio:minio:8.5.15")
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")

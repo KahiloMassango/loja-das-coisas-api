@@ -1,15 +1,16 @@
 package org.example.loja_das_coisas_api.auth.service
 
 import org.example.loja_das_coisas_api.auth.dto.LoginRequest
-import org.example.loja_das_coisas_api.auth.dto.RefreshTokenRequest
 import org.example.loja_das_coisas_api.auth.dto.TokenResponse
 import org.example.loja_das_coisas_api.auth.repository.UserRepository
 import org.example.loja_das_coisas_api.config.security.TokenService
 import org.example.loja_das_coisas_api.customer.dto.CustomerRegisterRequest
 import org.example.loja_das_coisas_api.customer.dto.CustomerProfileResponse
 import org.example.loja_das_coisas_api.customer.service.CustomerService
+import org.example.loja_das_coisas_api.exception.DeviceTypeNotSetException
 import org.example.loja_das_coisas_api.exception.InvalidCredentialsException
 import org.example.loja_das_coisas_api.exception.InvalidRefreshTokenException
+import org.example.loja_das_coisas_api.notification.service.DeviceService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -19,6 +20,7 @@ class AuthService(
     private val passwordEncoder: PasswordEncoder,
     private val userRepository: UserRepository,
     private val customerService: CustomerService,
+    private val deviceService: DeviceService,
 ) {
     fun authenticate(request: LoginRequest): TokenResponse {
         val user = userRepository.findByEmailOrPhoneNumberAndDeletedFalse(request.identifier)
@@ -26,6 +28,16 @@ class AuthService(
 
         if (!passwordEncoder.matches(request.password, user.password)) {
             throw InvalidCredentialsException()
+        }
+
+        if (request.deviceToken != null) {
+            if (request.deviceType == null) {
+                throw DeviceTypeNotSetException()
+            }
+
+            deviceService.registerDevice(
+                userId = user.id!!, deviceToken = request.deviceToken, deviceType = request.deviceType
+            )
         }
 
         val accessToken = tokenService.createAccessToken(user)
@@ -53,11 +65,12 @@ class AuthService(
         return TokenResponse(newAccessToken, refreshToken)
     }
 
-    fun logout(email: String) {
+    fun logout(email: String, refreshToken: String, deviceToken: String) {
         val user = userRepository.findByEmailOrPhoneNumberAndDeletedFalse(email)
             ?: throw InvalidCredentialsException()
 
         user.apply { this.refreshToken = null }
-        userRepository.save(user)
+        deviceService.removeDevice(deviceToken)
+        userRepository.saveAndFlush(user)
     }
 }

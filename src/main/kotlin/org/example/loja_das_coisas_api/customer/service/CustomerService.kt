@@ -35,8 +35,7 @@ class CustomerService(
         val savedUser = userRepository.saveAndFlush(user)
 
         val customer = CustomerProfile(
-            username = request.username,
-            user = savedUser
+            username = request.username, user = savedUser
         )
         return customerRepository.saveAndFlush(customer).toResponse()
     }

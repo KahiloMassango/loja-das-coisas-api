@@ -23,3 +23,6 @@ class InsufficientBalanceException :
 
 class TokenExpiredException(message: String) :
     BusinessException(message, HttpStatus.UNAUTHORIZED)
+
+class DeviceTypeNotSetException :
+    BusinessException("DeviceType not set", HttpStatus.BAD_REQUEST)

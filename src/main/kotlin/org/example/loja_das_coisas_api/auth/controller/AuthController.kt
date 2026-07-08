@@ -41,11 +41,17 @@ class AuthController(
         return ResponseEntity(APIResponse.success(authService.refresh(request.refreshToken)), HttpStatus.OK)
     }
 
-    @GetMapping("logout")
+    @PostMapping("logout")
     fun logout(
-        authentication: Authentication
+        authentication: Authentication,
+        @RequestBody refreshToken: String,
+        @RequestBody deviceToken: String,
     ): ResponseEntity<Response<Void>> {
-        authService.logout(authentication.name)
+        authService.logout(
+            email = authentication.name,
+            refreshToken = refreshToken,
+            deviceToken = deviceToken
+        )
         return ResponseEntity.status(HttpStatus.OK).body(null)
     }
 

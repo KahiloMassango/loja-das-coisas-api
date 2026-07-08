@@ -17,7 +17,7 @@ class Order(
     var total: Int,
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    var status: OrderStatus = OrderStatus.Processando,
+    var status: OrderStatus = OrderStatus.WaitingPayment,
     val paymentType: String,
     var deliveryFee: Int,
     var deliveryAddressName: String,
@@ -30,5 +30,5 @@ class Order(
 ) : BaseEntity()
 
 enum class OrderStatus {
-    Pendente, Processando, Entregue, Cancelado
+    Processing, WaitingPayment, Delivered, Cancelled
 }

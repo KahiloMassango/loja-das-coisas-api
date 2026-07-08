@@ -5,6 +5,8 @@ import org.example.loja_das_coisas_api.customer.repository.CustomerRepository
 import org.example.loja_das_coisas_api.exception.DifferentStoreProductsException
 import org.example.loja_das_coisas_api.exception.EntityNotFoundException
 import org.example.loja_das_coisas_api.exception.InsufficientStockException
+import org.example.loja_das_coisas_api.notification.model.NotificationTargetType
+import org.example.loja_das_coisas_api.notification.service.NotificationService
 import org.example.loja_das_coisas_api.order.dto.*
 import org.example.loja_das_coisas_api.order.mapper.*
 import org.example.loja_das_coisas_api.order.model.Order
@@ -26,6 +28,7 @@ class OrderService(
     private val storeRepository: StoreRepository,
     private val orderItemRepository: OrderItemRepository,
     private val customerRepository: CustomerRepository,
+    private val notificationService: NotificationService
 ) {
 
     @Transactional
@@ -38,7 +41,7 @@ class OrderService(
         val subtotal = request.orderItems.sumOf {
             it.quantity * productItemRepository.findByIdAndDeletedFalse(it.productItemId).get().price
         }
-        val order = Order(
+        var order = Order(
             customer = user,
             store = productItem.product.store,
             productQty = request.orderItems.size,
@@ -65,8 +68,17 @@ class OrderService(
             )
         }
 
-        orderItemRepository.saveAll(orderItems)
-        return orderRepository.save(order).toDtoRes(request.orderItems.size)
+        orderItemRepository.saveAllAndFlush(orderItems)
+        order = orderRepository.saveAndFlush(order)
+
+        notificationService.sendPushToUser(
+            userId = user.user.id!!,
+            title = "Novo Pedido",
+            body = "Novo Pedido criado com sucesso. Agurdando Pagamento!",
+            targetType = NotificationTargetType.ORDER,
+            targetId = order.id
+        )
+        return order.toDtoRes(request.orderItems.size)
     }
 
     fun getCustomerOrderById(id: UUID, customerEmail: String): CustomerOrderDetailDtoRes {
@@ -81,7 +93,7 @@ class OrderService(
         val order = orderRepository.findByIdAndStoreIdAndStatusIn(
             id = id,
             storeId = store.id!!,
-            status = listOf(OrderStatus.Processando, OrderStatus.Entregue),
+            status = listOf(OrderStatus.WaitingPayment, OrderStatus.Delivered),
         ).getOrNull() ?: throw EntityNotFoundException("Encomenda não encontrada")
 
         val orderItems = orderItemRepository.findAllByOrderId(order.id!!).map { it.toStoreDtoRes() }
@@ -93,12 +105,12 @@ class OrderService(
         val customerId = customerRepository.findByEmail(customerEmail)!!.id!!
 
         return CustomerOrdersDtoRes(
-            delivered = orderRepository.findAllByCustomerIdAndStatusIn(customerId, listOf(OrderStatus.Entregue))
+            delivered = orderRepository.findAllByCustomerIdAndStatusIn(customerId, listOf(OrderStatus.Delivered))
                 .map { it.toDtoRes(orderRepository.getOrderItemsCountByOrderId(it.id!!)) },
-            canceled = orderRepository.findAllByCustomerIdAndStatusIn(customerId, listOf(OrderStatus.Cancelado))
+            canceled = orderRepository.findAllByCustomerIdAndStatusIn(customerId, listOf(OrderStatus.Cancelled))
                 .map { it.toDtoRes(orderRepository.getOrderItemsCountByOrderId(it.id!!)) },
             pending = orderRepository.findAllByCustomerIdAndStatusIn(
-                customerId, listOf(OrderStatus.Pendente, OrderStatus.Processando)
+                customerId, listOf(OrderStatus.Processing, OrderStatus.WaitingPayment)
             ).map { it.toDtoRes(orderRepository.getOrderItemsCountByOrderId(it.id!!)) }
         )
     }
@@ -107,22 +119,18 @@ class OrderService(
         val store = storeRepository.findByEmail(storeEmail) ?: throw EntityNotFoundException("Loja indisponível")
 
         return StoreOrdersDtoRes(
-            totalPendingOrders = orderRepository.getStoreTotalOrdersByStatus(store.id!!, OrderStatus.Processando),
-            totalDeliveredOrders = orderRepository.getStoreTotalOrdersByStatus(store.id!!, OrderStatus.Entregue),
-            delivered = orderRepository.findAllByStoreIdAndStatusIn(store.id!!, listOf(OrderStatus.Entregue))
+            totalPendingOrders = orderRepository.getStoreTotalOrdersByStatus(store.id!!, OrderStatus.WaitingPayment),
+            totalDeliveredOrders = orderRepository.getStoreTotalOrdersByStatus(store.id!!, OrderStatus.Delivered),
+            delivered = orderRepository.findAllByStoreIdAndStatusIn(store.id!!, listOf(OrderStatus.Delivered))
                 .map { it.toStoreDtoRes(orderRepository.getOrderItemsCountByOrderId(it.id!!)) },
-            pending = orderRepository.findAllByStoreIdAndStatusIn(store.id!!, listOf(OrderStatus.Processando))
+            pending = orderRepository.findAllByStoreIdAndStatusIn(store.id!!, listOf(OrderStatus.WaitingPayment))
                 .map { it.toStoreDtoRes(orderRepository.getOrderItemsCountByOrderId(it.id!!)) }
         )
     }
 
     @Transactional
-    fun confirmOrderPayment(orderId: UUID, amount: Int) {
+    fun confirmOrderPayment(orderId: UUID) {
         val order = orderRepository.findById(orderId).get()
-
-        if (order.total != amount) {
-            throw Exception("Order Inválid amount for the order")
-        }
 
         order.orderItems.forEach { orderItem ->
             val updatedProductItem = getProductItem(orderItem.productItem.id!!).apply {
@@ -131,16 +139,41 @@ class OrderService(
             productItemRepository.save(updatedProductItem)
         }
 
-        order.apply { status = OrderStatus.Pendente }
+        order.apply { status = OrderStatus.Processing }
+        orderRepository.save(order)
+
+        notificationService.sendPushToUser(
+            userId = order.customer.user.id!!,
+            title = "Pedido Pago",
+            body = "Seu pedido foi pago e encotrase em processamento",
+            targetType = NotificationTargetType.ORDER,
+            targetId = order.id
+        )
+
+        notificationService.sendPushToUser(
+            userId = order.store.user.id!!,
+            title = "Novo Pedido",
+            body = "Novo pedido, prepara o pedido para entrega",
+            targetType = NotificationTargetType.ORDER,
+            targetId = order.id
+        )
     }
 
     fun confirmOrderDelivered(orderId: UUID, storeEmail: String) {
         val store = storeRepository.findByEmail(storeEmail) ?: throw EntityNotFoundException("Loja indisponível")
-        val order = orderRepository.findByIdAndStoreIdAndStatusLike(orderId, store.id!!, OrderStatus.Processando)
+        val order = orderRepository.findByIdAndStoreIdAndStatusLike(orderId, store.id!!, OrderStatus.WaitingPayment)
             .getOrNull() ?: throw EntityNotFoundException("Order not found with id $orderId")
 
-        order.apply { status = OrderStatus.Entregue }
+        order.apply { status = OrderStatus.Delivered }
         orderRepository.save(order)
+
+        notificationService.sendPushToUser(
+            userId = order.customer.user.id!!,
+            title = "Pedido foi entregue",
+            body = "Seu pedido foi entregue com sucesso",
+            targetType = NotificationTargetType.ORDER,
+            targetId = order.id
+        )
     }
 
     @Transactional
@@ -153,8 +186,15 @@ class OrderService(
             productItemRepository.save(productItem)
         }
 
-        order.status = OrderStatus.Cancelado
+        order.status = OrderStatus.Cancelled
         orderRepository.save(order)
+        notificationService.sendPushToUser(
+            userId = order.store.user.id!!,
+            title = "Pedido Cancelado",
+            body = "Pedido cancelado por outro motivos",
+            targetType = NotificationTargetType.ORDER,
+            targetId = order.id
+        )
     }
 
     private fun validateOrderItems(storeId: UUID, items: List<OrderItemDtoReq>) {

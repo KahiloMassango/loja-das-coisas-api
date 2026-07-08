@@ -37,7 +37,7 @@ fun Order.toStoreDtoRes(orderTotalItems: Int) = StoreOrderDtoRes(
     date = createdAt!!.toDateTime().toLocalDate().toString(),
     customerName = customer.username,
     orderTotalItems = orderTotalItems,
-    pending = status == OrderStatus.Processando,
+    pending = status == OrderStatus.WaitingPayment,
 )
 
 fun Order.toStoreDetailDtoRes(orderItems: List<OrderItemStoreDtoRes>) = StoreOrderDetailDtoRes(
@@ -50,7 +50,7 @@ fun Order.toStoreDetailDtoRes(orderItems: List<OrderItemStoreDtoRes>) = StoreOrd
     total = total,
     deliveryAddressName = deliveryAddressName,
     paymentType = paymentType,
-    delivered = status == OrderStatus.Entregue,
+    delivered = status == OrderStatus.Delivered,
     orderItems = orderItems
 )
 

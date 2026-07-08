@@ -27,9 +27,9 @@ interface OrderRepository : JpaRepository<Order, UUID> {
     fun findByIdAndStoreIdAndStatusIn(id: UUID, storeId: UUID, status: List<OrderStatus>): Optional<Order>
 
     @Query("select coalesce(sum(o.total), 0) from Order o where o.store.id = :storeId and o.status = :status and o.withdrawn = false")
-    fun getStoreBalance(storeId: UUID, status: OrderStatus = OrderStatus.Entregue): Int
+    fun getStoreBalance(storeId: UUID, status: OrderStatus = OrderStatus.Delivered): Int
 
     @Modifying
     @Query("UPDATE Order o SET o.withdrawn = true WHERE o.store.id = :storeId and o.status = :status and o.withdrawn = false")
-    fun updateOrdersWithdrawnTrue(storeId: UUID, status: OrderStatus = OrderStatus.Entregue)
+    fun updateOrdersWithdrawnTrue(storeId: UUID, status: OrderStatus = OrderStatus.Delivered)
 }

@@ -11,6 +11,7 @@ import org.example.loja_das_coisas_api.exception.DeviceTypeNotSetException
 import org.example.loja_das_coisas_api.exception.InvalidCredentialsException
 import org.example.loja_das_coisas_api.exception.InvalidRefreshTokenException
 import org.example.loja_das_coisas_api.notification.service.DeviceService
+import org.example.loja_das_coisas_api.notification.service.NotificationService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
@@ -21,6 +22,7 @@ class AuthService(
     private val userRepository: UserRepository,
     private val customerService: CustomerService,
     private val deviceService: DeviceService,
+    private val notificationService: NotificationService
 ) {
     fun authenticate(request: LoginRequest): TokenResponse {
         val user = userRepository.findByEmailOrPhoneNumberAndDeletedFalse(request.identifier)
@@ -45,6 +47,8 @@ class AuthService(
 
         user.apply { this.refreshToken = refreshToken }
         userRepository.save(user)
+
+        notificationService.sendPushToUser(user.id!!, "Login", "Welcome back")
 
         return TokenResponse(accessToken, refreshToken)
     }

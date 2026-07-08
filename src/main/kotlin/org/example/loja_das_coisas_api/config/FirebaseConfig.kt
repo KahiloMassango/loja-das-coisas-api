@@ -21,7 +21,6 @@ class FirebaseConfig {
             .setCredentials(GoogleCredentials.fromStream(serviceAccount))
             .build()
 
-        // Prevent re-initialization if the app restarts in a dev environment
         if (FirebaseApp.getApps().isEmpty()) {
             return FirebaseApp.initializeApp(options)
         }

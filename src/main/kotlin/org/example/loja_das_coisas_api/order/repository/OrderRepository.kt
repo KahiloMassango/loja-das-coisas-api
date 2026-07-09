@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
+import java.math.BigDecimal
 import java.util.*
 
 @Repository
@@ -26,8 +27,8 @@ interface OrderRepository : JpaRepository<Order, UUID> {
     fun findByIdAndStoreIdAndStatusLike(id: UUID, storeId: UUID, status: OrderStatus): Optional<Order>
     fun findByIdAndStoreIdAndStatusIn(id: UUID, storeId: UUID, status: List<OrderStatus>): Optional<Order>
 
-    @Query("select coalesce(sum(o.total), 0) from Order o where o.store.id = :storeId and o.status = :status and o.withdrawn = false")
-    fun getStoreBalance(storeId: UUID, status: OrderStatus = OrderStatus.Delivered): Int
+    @Query("select coalesce(sum(o.total), 0.0) from Order o where o.store.id = :storeId and o.status = :status and o.withdrawn = false")
+    fun getStoreBalance(storeId: UUID, status: OrderStatus = OrderStatus.Delivered): BigDecimal
 
     @Modifying
     @Query("UPDATE Order o SET o.withdrawn = true WHERE o.store.id = :storeId and o.status = :status and o.withdrawn = false")

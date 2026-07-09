@@ -3,6 +3,7 @@ package org.example.loja_das_coisas_api.store.service
 import jakarta.transaction.Transactional
 import org.example.loja_das_coisas_api.exception.EntityNotFoundException
 import org.example.loja_das_coisas_api.exception.InsufficientBalanceException
+import org.example.loja_das_coisas_api.notification.service.NotificationService
 import org.example.loja_das_coisas_api.order.repository.OrderRepository
 import org.example.loja_das_coisas_api.store.dto.StoreFinanceStatus
 import org.example.loja_das_coisas_api.store.dto.StoreWithdrawDtoRes
@@ -12,12 +13,14 @@ import org.example.loja_das_coisas_api.store.model.toDtoRes
 import org.example.loja_das_coisas_api.store.repository.StoreRepository
 import org.example.loja_das_coisas_api.store.repository.StoreWithdrawRepository
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
 
 @Service
 class StoreFinanceService(
     private val storeWithdrawRepository: StoreWithdrawRepository,
     private val orderRepository: OrderRepository,
-    private val storeRepository: StoreRepository
+    private val storeRepository: StoreRepository,
+    private val notificationService: NotificationService
 ) {
 
     @Transactional
@@ -26,11 +29,11 @@ class StoreFinanceService(
 
         val storeBalance = orderRepository.getStoreBalance(store.id!!)
 
-        if (storeBalance <= 0) {
+        if (storeBalance <= BigDecimal.ZERO) {
             throw InsufficientBalanceException()
         }
 
-        val feeAmount = ((store.fee.toDouble() / 100) * storeBalance).toInt()
+        val feeAmount = (store.fee / 100).toBigDecimal() * storeBalance
 
         val storeWithdraw = StoreWithdraw(
             store = store,

@@ -3,6 +3,7 @@ package org.example.loja_das_coisas_api.product.dto.request
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import org.springframework.web.multipart.MultipartFile
+import java.math.BigDecimal
 import java.util.*
 
 data class ProductDtoReq(
@@ -26,7 +27,7 @@ data class ProductUpdateDtoReq(
 
 data class ProductItemDtoReq(
     val stockQuantity: Int,
-    val price: Int,
+    val price: BigDecimal,
     val image: MultipartFile,
     val sizeId: UUID?,
     val colorId: UUID?
@@ -34,7 +35,7 @@ data class ProductItemDtoReq(
 
 data class ProductItemUpdateDtoReq(
     val stockQuantity: Int,
-    val price: Int,
+    val price: BigDecimal,
     val image: MultipartFile?
 )
 

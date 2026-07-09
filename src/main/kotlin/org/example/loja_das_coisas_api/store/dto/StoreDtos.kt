@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Size
 import org.example.loja_das_coisas_api.product.dto.response.ProductDtoRes
+import java.math.BigDecimal
 import java.util.*
 
 data class StoreRegisterRequest(
@@ -38,7 +39,7 @@ data class StoreRegisterRequest(
     val bankAccountName: String,
     @get:NotBlank(message = "Iban é obrigatório")
     val bankAccountIban: String,
-    val fee: Int,
+    val fee: Double,
 )
 
 data class StoreDtoRes(
@@ -88,15 +89,15 @@ data class StoreDetailDtoRes(
 )
 
 data class StoreFinanceStatus(
-    val balance: Int,
+    val balance: BigDecimal,
     val pending: List<StoreWithdrawDtoRes>,
     val completed: List<StoreWithdrawDtoRes>
 )
 
 data class StoreWithdrawDtoRes(
-    val amount: Int,
-    val fee: Int,
-    val feeAmount: Int,
-    val total: Int,
+    val amount: BigDecimal,
+    val fee: Double,
+    val feeAmount: BigDecimal,
+    val total: BigDecimal,
     val requestDate: String
 )

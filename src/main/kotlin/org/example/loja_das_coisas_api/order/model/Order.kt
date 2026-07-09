@@ -4,6 +4,8 @@ import jakarta.persistence.*
 import org.example.loja_das_coisas_api.customer.model.CustomerProfile
 import org.example.loja_das_coisas_api.shared.model.BaseEntity
 import org.example.loja_das_coisas_api.store.model.StoreProfile
+import java.math.BigDecimal
+import java.math.BigInteger
 
 @Entity
 @Table(name = "orders")
@@ -13,13 +15,13 @@ class Order(
     @ManyToOne(fetch = FetchType.LAZY)
     var store: StoreProfile,
     var productQty: Int,
-    var subTotal: Int,
-    var total: Int,
+    var subTotal: BigDecimal,
+    var total: BigDecimal,
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     var status: OrderStatus = OrderStatus.WaitingPayment,
     val paymentType: String,
-    var deliveryFee: Int,
+    var deliveryFee: BigDecimal,
     var deliveryAddressName: String,
     var deliveryLatitude: Double,
     var deliveryLongitude: Double,

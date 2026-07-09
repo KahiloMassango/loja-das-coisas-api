@@ -38,7 +38,7 @@ import java.time.LocalTime
     var deleted: Boolean = false,
     var bankAccountName: String,
     var bankAccountIban: String,
-    var fee: Int,
+    var fee: Double,
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     var user: User

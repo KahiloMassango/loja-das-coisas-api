@@ -1,5 +1,6 @@
 package org.example.loja_das_coisas_api.product.dto.response
 
+import java.math.BigDecimal
 import java.util.*
 
 data class ProductDtoRes(
@@ -49,7 +50,7 @@ data class ProductWithVariationStoreDtoRes(
 data class ProductItemDtoRes(
     val id: UUID,
     val stockQuantity: Int,
-    val price: Int,
+    val price: BigDecimal,
     val imageUrl: String?,
     val color: String?,
     val size: String?
@@ -58,7 +59,7 @@ data class ProductItemDtoRes(
 data class ProductItemStoreDtoRes(
     val id: UUID,
     val stockQuantity: Int,
-    val price: Int,
+    val price: BigDecimal,
     val imageUrl: String?,
     val color: ColorDtoRes?,
     val size: SizeDtoRes?

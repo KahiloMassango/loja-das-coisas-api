@@ -39,15 +39,16 @@ class OrderService(
         validateOrderItems(productItem.product.store.id!!, request.orderItems)
 
         val subtotal = request.orderItems.sumOf {
-            it.quantity * productItemRepository.findByIdAndDeletedFalse(it.productItemId).get().price
+            it.quantity.toBigDecimal() * productItemRepository.findByIdAndDeletedFalse(it.productItemId).get().price
         }
+
         var order = Order(
             customer = user,
             store = productItem.product.store,
             productQty = request.orderItems.size,
             subTotal = subtotal,
-            total = subtotal + request.deliveryFee,
-            deliveryFee = request.deliveryFee,
+            total = subtotal + request.deliveryFeeAmount,
+            deliveryFee = request.deliveryFeeAmount,
             deliveryAddressName = request.deliveryAddressName,
             deliveryLatitude = request.latitude,
             deliveryLongitude = request.longitude,

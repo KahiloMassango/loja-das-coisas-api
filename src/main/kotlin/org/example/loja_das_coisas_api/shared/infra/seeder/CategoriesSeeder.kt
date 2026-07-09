@@ -56,7 +56,7 @@ class CategoriesSeeder(
             )
         )
 
-        genders = genderRepository.saveAllAndFlush(genders)
+        genderRepository.saveAllAndFlush(genders)
         categoryRepository.saveAllAndFlush(categories)
     }
 }

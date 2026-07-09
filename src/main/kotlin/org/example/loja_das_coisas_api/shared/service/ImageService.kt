@@ -29,7 +29,7 @@ class ImageService {
             throw Exception("Failed to save the image file")
         }
 
-        return "https://silkworm-immortal-correctly.ngrok-free.app/v1/images/$fileName"
+        return "http://localhost:8080/v1/images/$fileName"
     }
 
     fun serveImage(imageName: String): ByteArray? {

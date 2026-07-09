@@ -73,8 +73,8 @@ class UserSeeder(
             offersDelivery = true,
             deleted = false,
             bankAccountName = "Loja das Coisas Lda",
-            bankAccountIban = "AOO06 0440 0000 6970 8976 1018 5",
-            fee = 5,
+            bankAccountIban = "AOO06044000006970897610185",
+            fee = 5.0,
             user = sellerUser
         )
 

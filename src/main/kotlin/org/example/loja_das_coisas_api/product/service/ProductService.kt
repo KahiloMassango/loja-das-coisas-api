@@ -49,8 +49,7 @@ class ProductService(
         val existingGender = genderRepository.findById(request.genderId)
             .getOrNull() ?: throw EntityNotFoundException("Gênero não encontrado")
 
-        val existingStore = storeRepository.findByEmail(storeEmail)
-            ?: throw Exception("Store with email $storeEmail not found")
+        val existingStore = storeRepository.findByEmail(storeEmail)!!
 
         val imageUrl = imageService.uploadImage(request.image)
 
@@ -81,6 +80,7 @@ class ProductService(
         return fetchedProduct.toStoreDtoResWithVariation(productItems)
     }
 
+    @Transactional
     fun deleteProduct(storeEmail: String, productId: UUID) {
         val fetchedProduct = productRepository.findByIdAndDeletedFalse(productId)
             .getOrNull() ?: throw EntityNotFoundException("Produto não encontrado")

@@ -33,8 +33,8 @@ class AdminController(
     }
 
     @PostMapping("orders/{orderId}/{amount}")
-    fun confirmOrderPayment(@PathVariable orderId: UUID, @PathVariable amount: Int): ResponseEntity<Unit> {
-        orderService.confirmOrderPayment(orderId, amount)
+    fun confirmOrderPayment(@PathVariable orderId: UUID): ResponseEntity<Unit> {
+        orderService.confirmOrderPayment(orderId)
         return ResponseEntity.noContent().build()
     }
 

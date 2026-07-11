@@ -9,12 +9,14 @@ import org.example.loja_das_coisas_api.customer.repository.CustomerRepository
 import org.example.loja_das_coisas_api.store.model.StoreProfile
 import org.example.loja_das_coisas_api.store.repository.StoreRepository
 import org.springframework.boot.CommandLineRunner
+import org.springframework.core.annotation.Order
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
 import java.time.LocalTime
 
 
 @Component
+@Order(2)
 class UserSeeder(
     private val userRepository: UserRepository,
     private val customerRepository: CustomerRepository,

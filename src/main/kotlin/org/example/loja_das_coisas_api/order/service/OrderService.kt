@@ -54,6 +54,7 @@ class OrderService(
             deliveryLongitude = request.longitude,
             paymentType = request.paymentType,
         )
+        order = orderRepository.saveAndFlush(order)
 
         val orderItems = request.orderItems.map { orderItemReq ->
             val updatedProductItem = getProductItem(orderItemReq.productItemId)
@@ -70,7 +71,6 @@ class OrderService(
         }
 
         orderItemRepository.saveAllAndFlush(orderItems)
-        order = orderRepository.saveAndFlush(order)
 
         notificationService.sendPushToUser(
             userId = user.user.id!!,
@@ -146,7 +146,7 @@ class OrderService(
         notificationService.sendPushToUser(
             userId = order.customer.user.id!!,
             title = "Pedido Pago",
-            body = "Seu pedido foi pago e encotrase em processamento",
+            body = "Seu pedido foi pago e encontra-se em processamento",
             targetType = NotificationTargetType.ORDER,
             targetId = order.id
         )

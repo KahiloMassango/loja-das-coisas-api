@@ -22,6 +22,7 @@ class AuthService(
     private val userRepository: UserRepository,
     private val customerService: CustomerService,
     private val deviceService: DeviceService,
+    private val notificationService: NotificationService
 ) {
     fun authenticate(request: LoginRequest): TokenResponse {
         val user = userRepository.findByEmailOrPhoneNumberAndDeletedFalse(request.identifier)
@@ -46,6 +47,12 @@ class AuthService(
 
         user.apply { this.refreshToken = refreshToken }
         userRepository.save(user)
+
+        notificationService.sendPushToUser(
+            userId = user.id!!,
+            title = "New login",
+            body = "New device logged in, is that you?",
+        )
 
         return TokenResponse(accessToken, refreshToken)
     }

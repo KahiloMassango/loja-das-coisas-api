@@ -47,6 +47,7 @@ class AuthController(
         @RequestBody refreshToken: String,
         @RequestBody deviceToken: String,
     ): ResponseEntity<Response<Void>> {
+        println("refreshToken: $refreshToken, deviceToken: $deviceToken")
         authService.logout(
             email = authentication.name,
             refreshToken = refreshToken,

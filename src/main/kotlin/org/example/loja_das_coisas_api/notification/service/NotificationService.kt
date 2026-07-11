@@ -1,6 +1,5 @@
 package org.example.loja_das_coisas_api.notification.service
 
-import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingException
 import com.google.firebase.messaging.Message
@@ -49,7 +48,7 @@ class NotificationService(
                 }
 
 
-                val response = FirebaseMessaging.getInstance().send(message.build())
+                FirebaseMessaging.getInstance().send(message.build())
             } catch (e: FirebaseMessagingException) {
                 println("Error sending push notification: ${e.toString()}")
                 // If the exception indicates an invalid token (e.g., UNREGISTERED or INVALID_ARGUMENT in FCM)

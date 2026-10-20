@@ -30,7 +30,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-oauth2-authorization-server")
     //implementation("org.springframework.security:spring-security-web:6.4.2")
     //implementation("org.springframework.security:spring-security-core:6.4.2")
-  //  implementation("org.springframework.security:spring-security-config:6.4.2")
+    //implementation("org.springframework.security:spring-security-config:6.4.2")
     implementation("org.hibernate.common:hibernate-commons-annotations:6.0.6.Final")
 
     implementation("com.google.firebase:firebase-admin:9.8.0")

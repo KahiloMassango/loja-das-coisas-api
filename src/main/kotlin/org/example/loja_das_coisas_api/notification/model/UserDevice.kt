@@ -16,7 +16,7 @@ import org.example.loja_das_coisas_api.shared.model.BaseEntity
 @Table(name = "user_devices")
 class UserDevice(
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     var deviceToken: String,
 
     @Enumerated(EnumType.STRING)

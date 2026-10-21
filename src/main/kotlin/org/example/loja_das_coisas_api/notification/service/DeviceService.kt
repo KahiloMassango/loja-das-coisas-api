@@ -47,6 +47,7 @@ class DeviceService(
             .map { it.deviceToken }
     }
 
+    @Transactional
     fun removeDevice(deviceToken: String) {
         deviceRepository.deleteByDeviceToken(deviceToken)
     }

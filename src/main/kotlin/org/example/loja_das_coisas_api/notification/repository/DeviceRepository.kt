@@ -8,7 +8,7 @@ import java.util.*
 @Repository
 interface DeviceRepository : JpaRepository<UserDevice, UUID> {
 
-    fun findByUserId(userId: UUID): Optional<UserDevice>
+    fun findByUserId(userId: UUID): List<UserDevice>
 
     fun findByDeviceToken(deviceToken: String): Optional<UserDevice>
     fun findByUserIdAndIsActiveTrue(userId: UUID): List<UserDevice>

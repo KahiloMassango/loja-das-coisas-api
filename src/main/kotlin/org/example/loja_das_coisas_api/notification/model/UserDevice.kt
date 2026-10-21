@@ -1,12 +1,12 @@
 package org.example.loja_das_coisas_api.notification.model
 
-import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
-import jakarta.persistence.OneToOne
+import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.example.loja_das_coisas_api.auth.model.User
 import org.example.loja_das_coisas_api.shared.model.BaseEntity
@@ -25,8 +25,8 @@ class UserDevice(
 
     var isActive: Boolean = true,
 
-    @OneToOne(cascade = [(CascadeType.ALL)])
-    @JoinColumn(name = "user_id", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     var user: User
 
 ): BaseEntity()

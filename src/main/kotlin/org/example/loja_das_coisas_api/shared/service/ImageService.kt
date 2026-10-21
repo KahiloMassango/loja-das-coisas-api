@@ -10,30 +10,34 @@ import java.util.*
 @Service
 class ImageService {
 
-    @Value("\${file.upload-dir}")
-    private val uploadDir: String? = null
+    @Value("\${file.upload-dir:src/main/upload/images}")
+    private val uploadDir: String = "src/main/upload/images"
+
+    @Value("\${app.base-url:http://localhost:8080}")
+    private val baseUrl: String = "http://localhost:8080"
 
     fun uploadImage(image: MultipartFile): String {
-        val extension = image.originalFilename?.substringAfterLast(".")
+        val extension = image.originalFilename?.substringAfterLast(".") ?: "jpg"
         val fileName = UUID.randomUUID().toString() + "." + extension
 
-        val filePath = Paths.get(uploadDir!!, fileName)
-        val uploadPath = filePath.parent
+        val uploadPath = Paths.get(uploadDir)
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath)
         }
         try {
-            val fileNameAndPath = Paths.get(uploadDir, fileName)
-            Files.write(fileNameAndPath, image.bytes)
+            val destination = uploadPath.resolve(fileName)
+            Files.write(destination, image.bytes)
         } catch (e: Exception) {
-            throw Exception("Failed to save the image file")
+            throw Exception("Failed to save the image file: ${e.message}")
         }
 
-        return "http://localhost:8080/v1/images/$fileName"
+        val cleanBaseUrl = baseUrl.trimEnd('/')
+        return "$cleanBaseUrl/v1/images/$fileName"
     }
 
     fun serveImage(imageName: String): ByteArray? {
-        val imagePath = Paths.get(uploadDir!!).resolve(imageName)
+        val imagePath = Paths.get(uploadDir).resolve(imageName)
         return if (Files.exists(imagePath)) Files.readAllBytes(imagePath) else null
     }
 }
+

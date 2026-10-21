@@ -40,8 +40,14 @@ class SecurityConfig {
             it.requestMatchers(HttpMethod.GET, "/v1/categories/**").hasAnyRole(UserRole.ADMIN.name)
 
 
-            it.requestMatchers("/v1/customer/**").hasRole(UserRole.CUSTOMER.name)
-            it.requestMatchers("/swagger-ui/**","/swagger-resources/**", "/api-docs/**", "/webjars/**", "/swagger-ui-custom/**").permitAll()
+            it.requestMatchers(
+                "/actuator/**",
+                "/swagger-ui/**",
+                "/swagger-resources/**",
+                "/api-docs/**",
+                "/webjars/**",
+                "/swagger-ui-custom/**"
+            ).permitAll()
             it.anyRequest().permitAll()
         }
 
@@ -57,7 +63,7 @@ class SecurityConfig {
         }
 
         // Other configuration
-        http.cors { it.disable() }
+        http.cors { it.configurationSource(corsConfigurationSource()) }
         http.sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
         http.csrf { it.disable() }
         http.headers { header ->
@@ -68,13 +74,23 @@ class SecurityConfig {
         return http.build()
     }
 
+    @org.springframework.beans.factory.annotation.Value("\${cors.allowed-origins:http://localhost:4200,http://localhost:3000,http://localhost:8080}")
+    private val allowedOrigins: String = "http://localhost:4200,http://localhost:3000,http://localhost:8080"
+
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
-        // allow localhost for dev purposes
         val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("http://localhost:3000", "http://localhost:8080", "https://silkworm-immortal-correctly.ngrok-free.app/qaaz")
-        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE")
-        configuration.allowedHeaders = listOf("authorization", "content-type")
+        val origins = allowedOrigins.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+        if (origins.contains("*")) {
+            configuration.allowedOriginPatterns = listOf("*")
+        } else {
+            configuration.allowedOrigins = origins
+        }
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+        configuration.allowedHeaders = listOf("*")
+        configuration.exposedHeaders = listOf("Authorization", "Content-Disposition")
+        configuration.allowCredentials = true
+
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
         return source

@@ -1,10 +1,12 @@
 package org.example.loja_das_coisas_api.notification.service
 
+import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingException
 import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.Notification
 import org.example.loja_das_coisas_api.notification.model.NotificationTargetType
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -13,6 +15,7 @@ class NotificationService(
     private val deviceService: DeviceService,
 
 ) {
+    private val logger = LoggerFactory.getLogger(NotificationService::class.java)
 
     fun sendPushToUser(
         userId: UUID,
@@ -22,6 +25,10 @@ class NotificationService(
         targetType: NotificationTargetType? = null,
         targetId: UUID? = null
     ) {
+        if (FirebaseApp.getApps().isEmpty()) {
+            logger.warn("Firebase not initialized. Skipping push notification for user: $userId")
+            return
+        }
         val tokens = deviceService.getActiveTokensForUser(userId)
 
         if (tokens.isEmpty()) {

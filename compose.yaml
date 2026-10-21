@@ -1,27 +1,46 @@
-version: '3.8'
-
 services:
-
-  #app:
-  #  container_name: store-app
-  #  build: .
-  #  ports:
-  #    - '8080:8080'
-  #  depends_on:
-  #     - postgres
-  #  networks:
-  #    - app-network
-
+  app:
+    container_name: loja-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8080}:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/storedb
+      - SPRING_DATASOURCE_USERNAME=superUser
+      - SPRING_DATASOURCE_PASSWORD=secret
+      - FILE_UPLOAD_DIR=/app/uploads
+      - APP_BASE_URL=${APP_BASE_URL:-http://localhost:8080}
+      - CORS_ALLOWED_ORIGINS=${CORS_ALLOWED_ORIGINS:-*}
+      - JWT_KEY=${JWT_KEY:-"EgZjaHJvbWUqBwgCECEYoAEyBggAEEUYOTIHCAEQIRigATIHCAIQIRigATIHCAMQIRigATIHCAQQIRigATIHCAUQIRigATIHCAYQIRiPAjIHCAcQIRiPAtIBCDQwOTNqMGo3qAIAsAIA"}
+    volumes:
+      - app_uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - app-network
 
   postgres:
     container_name: store-database
-    image: 'postgres:latest'
+    image: postgres:16-alpine
+    restart: unless-stopped
     environment:
       - POSTGRES_DB=storedb
       - POSTGRES_USER=superUser
       - POSTGRES_PASSWORD=secret
     ports:
-      - '3000:5432'
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U superUser -d storedb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - app-network
 
@@ -29,24 +48,8 @@ networks:
   app-network:
     driver: bridge
 
-  #minio:
-  #  image: docker.io/bitnami/minio:2024
-  #  ports:
-  #    - '9000:9000'
-  #    - '9001:9001'
-  #  networks:
-  #    - minionetwork
-  #  volumes:
-  #    - minio_data:/data
-  #  environment:
-  #    - MINIO_ROOT_USER=admin
-  #   - MINIO_ROOT_PASSWORD=password
-  #    - MINIO_DEFAULT_BUCKETS=store-files
-
-#networks:
-#  minionetwork:
-#    driver: bridge
-
-#volumes:
-#  minio_data:
-#    driver: local
+volumes:
+  postgres_data:
+    driver: local
+  app_uploads:
+    driver: local

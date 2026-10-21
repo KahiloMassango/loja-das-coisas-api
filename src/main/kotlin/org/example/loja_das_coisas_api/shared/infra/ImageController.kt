@@ -2,8 +2,8 @@ package org.example.loja_das_coisas_api.shared.infra
 
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.example.loja_das_coisas_api.shared.service.ImageService
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
+import org.springframework.http.MediaTypeFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -17,16 +17,16 @@ class ImageController(
     private val service: ImageService
 ) {
 
-    @Value("\${file.upload-dir}")
-    val imageDirectory: String = ""
-
-    @GetMapping("/{imageName}", produces = [MediaType.IMAGE_JPEG_VALUE])
+    @GetMapping("/{imageName}")
     fun serveImage(
         @PathVariable("imageName") imageName: String
     ): ResponseEntity<ByteArray> {
-        val resource = service.serveImage(imageName)
+        val resource = service.serveImage(imageName) ?: return ResponseEntity.notFound().build()
+        val mediaType = MediaTypeFactory.getMediaType(imageName)
+            .orElse(MediaType.IMAGE_JPEG)
         return ResponseEntity.ok()
-            .contentType(MediaType.IMAGE_JPEG)
+            .contentType(mediaType)
             .body(resource)
     }
 }
+

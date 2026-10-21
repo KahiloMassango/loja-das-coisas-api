@@ -7,6 +7,7 @@ import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.info.License
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
+import io.swagger.v3.oas.models.servers.Server
 import org.springdoc.core.models.GroupedOpenApi
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,6 +18,11 @@ class OpenApiConfig : WebMvcConfigurer {
     @Bean
     fun customOpenAPI(): OpenAPI {
         return OpenAPI()
+            .servers(
+                listOf(
+                    Server().url("/").description("Default Server URL")
+                )
+            )
             .info(
                 Info()
                     .title("Store API - Doc")

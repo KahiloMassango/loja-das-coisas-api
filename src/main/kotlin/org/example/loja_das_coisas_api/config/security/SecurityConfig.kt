@@ -18,11 +18,23 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableWebSecurity
 class SecurityConfig {
 
+    @org.springframework.beans.factory.annotation.Value("\${cors.allowed-origins:*}")
+    private val allowedOrigins: String = "*"
+
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        // Define public and private routes
+        // Enable CORS first so preflight and headers are processed early
+        http.cors { it.configurationSource(corsConfigurationSource()) }
+        http.csrf { it.disable() }
+        http.sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+        http.headers { header ->
+            header.frameOptions { it.disable() }
+            header.xssProtection { it.disable() }
+        }
 
+        // Define public and private routes
         http.authorizeHttpRequests {
+            it.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             it.requestMatchers("/v1/auth/logout").authenticated()
             it.requestMatchers("/v1/auth/login").permitAll()
             it.requestMatchers("/v1/auth/create-account").permitAll()
@@ -39,12 +51,14 @@ class SecurityConfig {
             it.requestMatchers(HttpMethod.GET, "/v1/genders/**").hasAnyRole(UserRole.ADMIN.name)
             it.requestMatchers(HttpMethod.GET, "/v1/categories/**").hasAnyRole(UserRole.ADMIN.name)
 
-
+            it.requestMatchers("/v1/customer/**").hasRole(UserRole.CUSTOMER.name)
             it.requestMatchers(
                 "/actuator/**",
                 "/swagger-ui/**",
+                "/swagger-ui.html",
                 "/swagger-resources/**",
                 "/api-docs/**",
+                "/v3/api-docs/**",
                 "/webjars/**",
                 "/swagger-ui-custom/**"
             ).permitAll()
@@ -62,34 +76,23 @@ class SecurityConfig {
             }
         }
 
-        // Other configuration
-        http.cors { it.configurationSource(corsConfigurationSource()) }
-        http.sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-        http.csrf { it.disable() }
-        http.headers { header ->
-            header.frameOptions { it.disable() }
-            header.xssProtection { it.disable() }
-        }
-
         return http.build()
     }
-
-    @org.springframework.beans.factory.annotation.Value("\${cors.allowed-origins:http://localhost:4200,http://localhost:3000,http://localhost:8080}")
-    private val allowedOrigins: String = "http://localhost:4200,http://localhost:3000,http://localhost:8080"
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
         val configuration = CorsConfiguration()
         val origins = allowedOrigins.split(",").map { it.trim() }.filter { it.isNotEmpty() }
-        if (origins.contains("*")) {
+        if (origins.isEmpty() || origins.contains("*")) {
             configuration.allowedOriginPatterns = listOf("*")
         } else {
-            configuration.allowedOrigins = origins
+            configuration.allowedOriginPatterns = origins
         }
-        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS", "HEAD")
         configuration.allowedHeaders = listOf("*")
-        configuration.exposedHeaders = listOf("Authorization", "Content-Disposition")
+        configuration.exposedHeaders = listOf("Authorization", "Content-Disposition", "*")
         configuration.allowCredentials = true
+        configuration.maxAge = 3600L
 
         val source = UrlBasedCorsConfigurationSource()
         source.registerCorsConfiguration("/**", configuration)
